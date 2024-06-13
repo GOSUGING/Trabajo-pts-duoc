@@ -44,14 +44,26 @@ def ver_asientos():
 # Función para comprar un asiento
 def comprar_asiento():
     nombre = input("Ingrese nombre del pasajero: ")
-    rut = input("Ingrese RUT del pasajero: ")
-    telefono = input("Ingrese telefono del pasajero: ")
-    codigo_descuento = input("Ingrese codigo descuento (si tiene): ")
+    rut = input("Ingrese RUT del pasajero (sin guión ni puntos): ")
+    telefono = input("Ingrese teléfono del pasajero: ")
+    codigo_descuento = input("Ingrese código descuento (si tiene): ")
+
+    if not rut.isdigit() or len(rut) != 9:
+        print("RUT inválido. Debe tener 9 dígitos y no contener guiones ni puntos.")
+        return
+
+    if not telefono.isdigit() or not (900000000 <= int(telefono) <= 999999999):
+        print("Teléfono inválido. Debe ser un número entre 900000000 y 999999999.")
+        return
 
     ver_asientos()  # Mostrar asientos disponibles
-    asiento = int(input("Seleccione el número del asiento que desea comprar: "))
+    try:
+        asiento = int(input("Seleccione el número del asiento que desea comprar: "))
+    except ValueError:
+        print("Número de asiento inválido. Debe ser un número.")
+        return
 
-    if asiento in pasajeros:
+    if str(asiento) in pasajeros:
         print("El asiento no está disponible, Por favor elija otro asiento.")
         return
 
@@ -67,7 +79,7 @@ def comprar_asiento():
     confirmar = input("¿Desea confirmar la compra? (si/no): ")
 
     if confirmar.lower() == "si":
-        pasajeros[asiento] = {
+        pasajeros[str(asiento)] = {
             "nombre": nombre,
             "rut": rut,
             "telefono": telefono,
@@ -89,10 +101,14 @@ def comprar_asiento():
 # Función para anular un vuelo
 def anular_vuelo():
     ver_asientos()  # Mostrar asientos disponibles
-    asiento = int(input("Seleccione el número de asiento que desea anular: "))
+    try:
+        asiento = int(input("Seleccione el número de asiento que desea anular: "))
+    except ValueError:
+        print("Número de asiento inválido. Debe ser un número.")
+        return
 
-    if asiento in pasajeros:
-        del pasajeros[asiento]  # Eliminar datos del pasajero
+    if str(asiento) in pasajeros:
+        del pasajeros[str(asiento)]  # Eliminar datos del pasajero
 
         # Reemplazar "X" por número de asiento en el mapa
         for fila_inicial, fila_actual in zip(asientos_iniciales, asientos):
@@ -108,32 +124,39 @@ def anular_vuelo():
 # Función para modificar datos
 def modificar_datos():
     ver_asientos()
-    asiento = int(input("Seleccione el número de asiento del pasajero: "))
+    try:
+        asiento = int(input("Seleccione el número de asiento del pasajero: "))
+    except ValueError:
+        print("Número de asiento inválido. Debe ser un número.")
+        return
 
-    if asiento in pasajeros:
+    if str(asiento) in pasajeros:
         rut = input("Ingrese RUT del pasajero para verificar: ")
-        if pasajeros[asiento]["rut"] == rut:
+        if pasajeros[str(asiento)]["rut"] == rut:
             print("Datos actuales del pasajero: ")
-            print(pasajeros[asiento])
+            print(pasajeros[str(asiento)])
             print("1. Modificar Nombre")
             print("2. Modificar Teléfono")
             try:
                 opcion = int(input("Seleccione la opción que desea modificar: "))
                 if opcion == 1:
                     nuevo_nombre = input("Ingrese el nuevo nombre: ")
-                    pasajeros[asiento]["nombre"] = nuevo_nombre
+                    pasajeros[str(asiento)]["nombre"] = nuevo_nombre
                     print("Nombre modificado con éxito.")
                 elif opcion == 2:
                     nuevo_telefono = input("Ingrese nuevo teléfono: ")
-                    pasajeros[asiento]["telefono"] = nuevo_telefono
+                    if not nuevo_telefono.isdigit() or not (900000000 <= int(nuevo_telefono) <= 999999999):
+                        print("Teléfono inválido. Debe ser un número entre 900000000 y 999999999.")
+                        return
+                    pasajeros[str(asiento)]["telefono"] = nuevo_telefono
                     print("Teléfono modificado con éxito")
                 else:
                     print("Opción no válida")
-            except ValueError as errorOpcion:
-                print("Opción debe ser entre 1 y 2.")
+            except ValueError:
+                print("Opción debe ser un número entre 1 y 2.")
             guardar_datos()  # Guardar datos en el archivo JSON
         else:
-            print("Rut no coincide con el pasajero del asiento seleccionado.")
+            print("RUT no coincide con el pasajero del asiento seleccionado.")
     else:
         print("El asiento no está ocupado")
 
@@ -159,6 +182,9 @@ def menu():
             elif opcion == 5:
                 print("Saliendo del programa...")
                 break
-        except ValueError as error_opcion_menu:
-            print("Opción debe ser entre 1 y 5, intente nuevamente")
+            else:
+                print("Opción no válida. Debe ser entre 1 y 5.")
+        except ValueError:
+            print("Opción debe ser un número entre 1 y 5. Intente nuevamente.")
 
+menu()
