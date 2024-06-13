@@ -59,7 +59,7 @@ def comprar_asiento():
     if codigo_descuento.lower() == "bancoduoc":
         precio *= 0.85  # Aplicar descuento si hay código válido
 
-    print(f"El valor del pasaje es: ${precio}")
+    print("El valor del pasaje es: ", precio)
 
     confirmar = input("¿Desea confirmar la compra? (si/no): ")
 
@@ -159,4 +159,3 @@ def menu():
         except ValueError as error_opcion_menu:
             print("Opción debe ser entre 1 y 5, intente nuevamente")
 
-menu()
