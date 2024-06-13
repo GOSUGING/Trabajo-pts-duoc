@@ -55,7 +55,10 @@ def comprar_asiento():
         print("El asiento no está disponible, Por favor elija otro asiento.")
         return
 
-    precio = 240000 if asiento >= 31 else 78900  # Calcular precio base
+    if asiento >= 31:
+        precio = 240000
+    else:               # Calcular precio base
+        precio = 78900     
     if codigo_descuento.lower() == "bancoduoc":
         precio *= 0.85  # Aplicar descuento si hay código válido
 
