@@ -5,21 +5,9 @@ Este programa en Python permite gestionar la venta de pasajes para la compañía
 ## Requisitos
 
 - Python 3.x
-- Biblioteca `numpy`
 
-## Instalación
 
-1. Clona este repositorio o descarga los archivos.
 
-2. Instala la biblioteca `numpy` si no la tienes:
-    ```bash
-    pip install numpy
-    ```
-
-3. Ejecuta el script principal:
-    ```bash
-    python nombre_del_script.py
-    ```
 
 ## Uso
 
